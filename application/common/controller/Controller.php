@@ -10,8 +10,19 @@
 namespace app\common\controller;
 
 use think\Controller as CoreController;
+use think\Request;
 
 abstract class Controller extends CoreController
 {
+    public $params = null;
+
+    public function __construct(Request $request = null)
+    {
+        parent::__construct($request);
+        if (!empty($this->request->param()))
+            $this->params = $this->request->param();
+    }
+
+
 
 }

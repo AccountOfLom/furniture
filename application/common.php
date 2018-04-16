@@ -11,6 +11,52 @@
 
 // 应用公共文件
 
+/**
+ * 根据键获取session中用户信息
+ */
+if (!function_exists('user_info')) {
+    function user_info($key) {
+        return session('user_info.' . $key);
+    }
+}
+
+/**
+ * 生成盐值
+ */
+if (!function_exists('create_salt_value')) {
+    function create_salt_value() {
+        $str = "QWERTYUIOPASDFGHJKLZXCVBNM1234567890qwertyuiopasdfghjklzxcvbnm";
+        str_shuffle($str);
+        return substr(str_shuffle($str), 0, 6);
+    }
+}
+
+/**
+ * 删除文件
+ */
+if (!function_exists('delete_file'))
+{
+    /**
+     * 删除文件资源
+     * @param $url
+     * @return bool
+     */
+    function delete_file($url){
+        $path = PUBLIC_PATH;
+        if(!empty($url)){
+            if (file_exists($path.$url)) {
+                $status = unlink($path.$url);
+            } else {
+                $status = true;
+            }
+        } else {
+            $status = false;
+        }
+        return $status;
+    }
+}
+
+
 if(!function_exists('array_mulit_exists'))
 {
     /**

@@ -9,9 +9,8 @@
 
 namespace app\admin\controller;
 
-use app\admin\model\AdminUser;
+use app\admin\model\User;
 use think\Controller;
-use think\Loader;
 use think\Session;
 
 class Login extends Controller
@@ -27,21 +26,16 @@ class Login extends Controller
 
     public function login()
     {
-        $validate = Loader::validate('AdminUser');
+        $validate = validate('User');
         if(!$validate->check($this->request->param())){
-            $result = [
-                'status'  => false,
-                'message' =>  $validate->getError()
-            ];
-        } else {
-            (new AdminUser())->setUserSession($this->request->param('account'));
-            $backUrl = redirect()->restore()->getData();
-            $result = [
-                'status' => true,
-                'data' => ['url' => $backUrl ? $backUrl : 'Index/index']
-            ];
+            $this->error($validate->getError());
         }
-        return $result;
+        if(isset($user_info) && !empty($user_info)) {
+            session('user_info',$user_info);
+        }
+        $backUrl = redirect()->restore()->getData();
+        (new User())->setUserSession($this->request->param('account'));
+        $this->success('success', $backUrl ? $backUrl : 'Index/index');
     }
 
     public function loginOut()

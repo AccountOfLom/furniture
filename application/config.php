@@ -230,6 +230,9 @@ return [
         'httponly'  => '',
         // 是否使用 setcookie
         'setcookie' => true,
+
+        'URL_MODEL' => 2,
+
     ],
 
     //分页配置

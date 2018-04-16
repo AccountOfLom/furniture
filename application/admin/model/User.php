@@ -10,7 +10,7 @@
 namespace app\admin\model;
 
 
-class AdminUser extends BaseModel
+class User extends BaseModel
 {
     /**
      * 设置用户 session
@@ -39,18 +39,33 @@ class AdminUser extends BaseModel
     }
 
     /**
-     * 根据字段条件查询
-     * @param array $where              条件
-     * @param boolean|string $showFields    读取字段值
-     * @throws \think\exception\DbException
-     * @return false|static[]
-     * @throws \think\exception\DbException
+     * 获取一个用户信息
+     * @param array $map
+     * @param bool $field
+     * @return array|false|\PDOStatement|string|\think\Model
      */
-    public function getInfo($where = [], $showFields = true)
+    public function getOne($map = [], $field = true)
     {
-        return self::all(function ($query) use ($where, $showFields) {
-            $query->where($where)->field($showFields);
-        });
+        return self::where($map)->field($field)->find();
     }
 
+
+    /**
+     * 保存方法
+     * @param $saveData
+     * @return mixed;
+     */
+    public function doSave($saveData)
+    {
+        $saveData['image'] = empty($saveData['org_image']) ? DEFAULT_IMAGE_PATH : $saveData['org_image'];
+        if ($saveData['upload_image']) {
+            $imgPath = self::uploadImg('image', 'user_icon');
+            $saveData['image'] = $imgPath ?? $saveData['image'];
+        }
+        if (empty($saveData['id'])) {
+            $saveData['salt_value'] = create_salt_value();
+            $saveData['password'] = md5(md5($saveData['password']) . $saveData['salt_value']);
+        }
+        return self::save($saveData);
+    }
 }

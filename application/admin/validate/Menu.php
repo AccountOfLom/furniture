@@ -10,9 +10,9 @@
 
 namespace app\admin\validate;
 
-use \app\admin\model\AdminUser as AdminUserModel;
+use \app\admin\model\User as UserModel;
 
-class AdminMenu extends AdminUserModel
+class AdminMenu extends UserModel
 {
 
 }

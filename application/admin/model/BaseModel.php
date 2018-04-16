@@ -13,5 +13,5 @@ use app\common\model\Model;
 
 class BaseModel extends Model
 {
-    protected $autoWriteTimestamp = true;
+
 }

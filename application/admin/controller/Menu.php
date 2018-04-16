@@ -16,7 +16,10 @@ class Menu extends BaseController
 
     public function index()
     {
-        return $this->fetch();
+        if ($this->request->has('module', 'param', true)) {
+            $this->assign('module', $this->request->param('module'));
+        }
+        return parent::index();
     }
 
     /**
@@ -107,23 +110,18 @@ class Menu extends BaseController
             }
         }
 
-        if($row !== false)
-        {
+        if($row !== false) {
             $this->success('保存成功','index');
-        }
-        else
-        {
+        } else {
             $this->error((new MenuModel())->getError());
         }
     }
 
     public function enable_unvisible($id, $visible)
     {
-        if($id && $visible == 0)
-        {
+        if($id && $visible == 0) {
             $row = MenuModel::get(['pid'=>$id,'visible'=>0]);
-            if($row)
-            {
+            if($row) {
                 return '该节点下存在隐藏节点，不允许变更为隐藏';
             }
         }
